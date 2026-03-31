@@ -1,3 +1,4 @@
+import { h } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -19,6 +20,12 @@ const router = createRouter({
       path: "/projects/:id",
       name: "SingleProject",
       component: () => import("@/views/SingleProjectView.vue"),
+    },
+    {
+      path: "/:catchAll(.*)*",
+      name: "NotFound",
+      // h() 可以生成一个html元素，import { h } from "vue";
+      component: h("p", { style: "color: red;" }, "404 Not Found"),
     },
   ],
 });
