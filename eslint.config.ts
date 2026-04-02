@@ -1,6 +1,6 @@
 import { globalIgnores } from "eslint/config";
 import { defineConfigWithVueTs, vueTsConfigs } from "@vue/eslint-config-typescript";
-import pluginVue, { rules } from "eslint-plugin-vue";
+import pluginVue from "eslint-plugin-vue";
 import pluginOxlint from "eslint-plugin-oxlint";
 import skipFormatting from "eslint-config-prettier/flat";
 
@@ -29,6 +29,17 @@ export default defineConfigWithVueTs(
     files: ["**/*.{vue,ts,mts,tsx}"],
     rules: {
       "vue/multi-word-component-names": "off",
+      // 1. 必须关闭原生规则（冲突根源！）
+      "no-unused-vars": "off",
+      // 2. TS 专用规则（正确忽略 _ 开头变量）
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          varsIgnorePattern: "^_", // 忽略所有 _ 开头的变量（_e / _res / _err）
+          argsIgnorePattern: "^_", // 忽略所有 _ 开头的参数
+          caughtErrorsIgnorePattern: "^_", // 🔥 关键：忽略 catch 里的 _e / _err
+        },
+      ],
     },
   },
 );
